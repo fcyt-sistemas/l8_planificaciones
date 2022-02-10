@@ -1,0 +1,74 @@
+@extends('layouts.app')
+@section('content')
+
+<div class="container">
+     @include('admin.docentes.modal')
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header justify-content-between">¡Listado de docentes!
+                    {!! Form::open(['route'=>'docentes','method'=>'GET','class'=>'form-inline','role'=>'search']) !!}
+                    <div class="button">
+		        		{!!link_to_route('docentes.create', $title = 'Agregar un Docente...', $parameters = null, $attributes = ['class'=>'btn btn-secondary'])!!}
+	             	</div>
+                    <div class="form-inline">
+                        {!! Form::text('nombres',null,['type'=>'search','name'=>'nombres','class'=>'form-control mr-sm-2','placeholder'=>'Búsqueda por nombre']) !!}    
+                    
+                    </div>
+                    <div class="form-inline">
+                        {!! Form::text('apellidos',null,['type'=>'search','name'=>'apellidos','class'=>'form-control mr-sm-2','placeholder'=>'Búsqueda por apellido']) !!}
+                    
+                    </div>
+                    <div class="form-inline">
+                        {!! Form::text('nro_documento',null,['type'=>'search','name'=>'nro_documento','class'=>'form-control mr-sm-2','placeholder'=>'Búsqueda por DNI']) !!}
+                    </div>
+                    <div class="form-inline">
+                        {!! Form::text('Localidad',null,['type'=>'search','name'=>'localidad','class'=>'form-control mr-sm-2','placeholder'=>'Búsqueda por Localidad']) !!}
+                    </div>
+                    <button class="btn btn-default my-2 my-sm-0"type="submit">Buscar</button>
+                    {!! Form::close() !!}
+                </div>
+
+
+                @if(Session::has('message'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                  <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
+                  {{Session::get('message')}}
+                </div>
+                @endif
+                <div class="card-body" data-form="deleteForm">
+                        <li class="list-group-item"> 
+                          <div class="row">
+                            <div class="col"><b>Apellidos</b></div>
+                            <div class="col"><b>Nombres</b></div>
+                            <div class="col"><b>DNI</b></div>
+                            <div class="col"><b>Localidad</b></div>
+                            <div class="col"><b>Operacion</b></div>
+                          </div> 
+		                </li>
+                      @foreach($docentes as $r)
+                    <li class="list-group-item"> 
+		              <div class="row">
+                            <div class="col">{{$r->apellidos}}</div>
+                            <div class="col">{{$r->nombres}}</div>
+                            <div class="col">{{$r->nro_documento}}</div>
+                            <div class="col">{{$r->localidad}}</div>
+                        <div class="col">
+                        <div class="btn-group">
+                                 {!!link_to_action('DocenteController@edit', $title = 'Editar', $parameters = $r, $attributes = ['class'=>'btn btn-secondary'])!!}
+                                 {!!Form::open(['route'=>['docentes.destroy',$r['id']],'method'=>'DELETE','class' =>'form-inline form-delete'])!!}
+								 {!!Form::submit('Eliminar!',['class'=>'btn btn-danger delete','name' => 'delete_modal'])!!}
+				                 {!!Form::close()!!}
+                        </div>
+                        </div>
+                      </div> 
+		            </li>
+                       @endforeach
+                       <li class="list-group-item">{{$docentes->links()}}</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
