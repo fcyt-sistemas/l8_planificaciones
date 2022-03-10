@@ -32,7 +32,7 @@
       </div>
 
         <div class="card-header justify-content-between">
-          <form name="add-blog-post-form" id="add-blog-post-form" method="GET" action="{{url('planificacion')}}"></form>
+          <form name="add-blog-post-form" id="add-blog-post-form" method="GET" action="{{url('admin.planificaciones.aprobado')}}"></form>
         @if(Session::has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">
           <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
@@ -41,12 +41,12 @@
         @endif
         <div class="card-body" data-form="deleteForm">
           <ul class="list-group list-group-flush">
-            @if(count($planificaciones) === 0)
+            @if(($aprobado) === 0)
             <div class="alert alert-success" role="alert">
               No hay elementos cargados
             </div>
             @endif
-            @foreach($planificaciones as $p)
+            @foreach($aprobado as $p)
             <li class="list-group-item">
               <form action="{{url(PlanificacionController::class,'show')}}" title = 'APROBADA' class='aprob' parameters = ($p->id)></form>
               <br>
@@ -64,7 +64,7 @@
               </div>
             </li>
             @endforeach
-            <li class="list-group-item">{{$planificaciones->appends(Request::only(['sede','carrera','asignatura','profesor','entregadas','aprobadas','revisadas', 'anio_academico']))->links()}}
+            <li class="list-group-item">{{$aprobado->appends(Request::only(['sede','carrera','asignatura','profesor','entregadas','aprobadas','revisadas', 'anio_academico']))->links()}}
         </div>
       </div>
     </div>

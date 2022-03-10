@@ -53,6 +53,7 @@ class PlanificacionController extends Controller
         foreach ($anios as $anio){
             $anio_academico[$anio] = $anio;
         }
+
         if ($request->user()->hasRole('admin')) {
             return view('admin.planificaciones.index', ['planificaciones' => $planificaciones, 'sedes' => $sedes, 'carreras' => $carreras, 'anio_academico' => $anio_academico]);
         }elseif (Auth::user()->hasRole('control') && \Session::get('tipoUsuario') == 'control') {
@@ -354,7 +355,7 @@ class PlanificacionController extends Controller
     return PDF::loadView('admin.planificaciones.impresion', ['image' => $image, 'planificaciones' => $planificaciones])->stream($planificaciones->catedra->nombre . '-' . $planificaciones->anio_academico . '.pdf');
   }
 
-  public function estados(Request $request){
+  public function aprobado(Request $request){
       $estado = Trim($request->get('estado'));
       $materia = trim($request->get('materia'));
 
@@ -364,15 +365,12 @@ class PlanificacionController extends Controller
 
         $sedes = Sede::pluck('nombre', 'id');
         $carreras = Carrera::pluck('nombre', 'id');
-
       
-        $planificaciones = Planificacion::whereSede($request->get('sede'))
+        $aprobado = Planificacion::whereSede($request->get('sede'))
         ->carrera($request->get('carrera'))
         ->asignatura($request->get('asignatura'))
         ->profesor($request->get('profesor'))
-        ->entregada($request->get('entregadas'))
         ->aprobada($request->get('aprobadas'))
-        ->revisada($request->get('revisadas'))
         ->anio($request->get('anio_academico'))
         ->paginate(10);
     
@@ -380,21 +378,9 @@ class PlanificacionController extends Controller
             $anio_academico[$anio] = $anio;
         }
         if ($request->user()->hasRole('admin')) {
-            if($estado=='aprobado'){
-                $aprobado=Planificacion::Aprobada($request->get('aprobado'))->paginate(5);
+                $aprobado=Planificacion::Aprobada($request->get('aprobadas'))->paginate(5);
                 return view('admin.planificaciones.aprobado', compact('aprobado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              elseif($estado=='revisado'){
-                  $revisado=Planificacion::Revisada($request->get('revisada'))->paginate(5);
-                  return view('admin.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              elseif($estado=='entregado'){
-                  $entregado=Planificacion::Entregada($request->get('entregada'))->paginate(5);
-                  return view('admin.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              else{
-                return view('admin.planificaciones.index', compact('planificaciones', 'sedes' , 'carreras', 'anio_academico'));
-              }
+ 
         }elseif (Auth::user()->hasRole('control') && \Session::get('tipoUsuario') == 'control') {
 
             foreach ($request->user()->docente->revisorDeCarreras as $carrera) {
@@ -405,54 +391,12 @@ class PlanificacionController extends Controller
                 $idsedes[] = $sede->id;
                 $sedes[$sede->id] = $sede->nombre;
             }
-            
-            if($estado=='aprobado'){
-                $aprobado=Planificacion::whereSede($request->get('sede'))
-                ->carrera($request->get('carrera'))
-                ->anio($request->get('anio_academico'))
-                ->asignatura($request->get('asignatura'))
-                ->profesor($request->get('profesor'))
-                ->aprobada($request->get('aprobadas'))
-                ->whereIn('carrera_id', $idcarreras)
-                ->whereIn('sede_id', $idsedes)
-                ->whereRaw('entregado is true and prox_version is null')
-                ->paginate(10);
-                return view('revisor.planificaciones.aprobado', compact('aprobado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              elseif($estado=='revisado'){
-                  $revisado=Planificacion::whereSede($request->get('sede'))
-                  ->carrera($request->get('carrera'))
-                  ->anio($request->get('anio_academico'))
-                  ->asignatura($request->get('asignatura'))
-                  ->profesor($request->get('profesor'))
-                  ->revisada($request->get('revisadas'))
-                  ->whereIn('carrera_id', $idcarreras)
-                  ->whereIn('sede_id', $idsedes)
-                  ->whereRaw('entregado is true and prox_version is null')
-                  ->paginate(10);
-                  return view('revisor.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              elseif($estado=='entregado'){
-                  $entregado=Planificacion::whereSede($request->get('sede'))
-                  ->carrera($request->get('carrera'))
-                  ->anio($request->get('anio_academico'))
-                  ->asignatura($request->get('asignatura'))
-                  ->profesor($request->get('profesor'))
-                  ->entregada($request->get('entregadas'))
-                  ->whereIn('carrera_id', $idcarreras)
-                  ->whereIn('sede_id', $idsedes)
-                  ->whereRaw('entregado is true and prox_version is null')
-                  ->paginate(10);
-                  return view('revisor.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              else{
-                return view('revisor.planificaciones.index', compact('planificaciones', 'sedes' , 'carreras', 'anio_academico'));
-              }
-
+            return view('revisor.planificaciones.aprobado', compact('aprobado', 'sedes' , 'carreras', 'anio_academico'));
+             
         } elseif (Auth::user()->hasRole('user') && \Session::get('tipoUsuario') == 'user') {
-            $planificaciones = Planificacion::whereRaw('docente_id =' . $request->user()->docente->id . ' and prox_version is null')
+            $aprobado = Planificacion::whereRaw('docente_id =' . $request->user()->docente->id . ' and prox_version is null')
             ->paginate(10);  
-            return view('usuario.planificaciones.index', ['planificaciones' => $planificaciones, 'sedes' => $sedes, 'carreras' => $carreras, 'anio_academico' => $anio_academico]);
+            return view('usuario.planificaciones.aprobado', compact('aprobado', 'sedes' , 'carreras', 'anio_academico'));
         } elseif (Auth::user()->hasRole('lectura') && \Session::get('tipoUsuario') == 'lectura'){
             $sedes = Sede::pluck('nombre', 'id');
             $carreras = Carrera::pluck('nombre', 'id');
@@ -461,51 +405,115 @@ class PlanificacionController extends Controller
             foreach ($anios as $anio) {
                 $anio_academico[$anio] = $anio;
             }
-            
-            if($estado=='aprobado'){
-                $aprobado=Planificacion::whereSede($request->get('sede'))
-                ->carrera($request->get('carrera'))
-                ->anio($request->get('anio_academico'))
-                ->asignatura($request->get('asignatura'))
-                ->profesor($request->get('profesor'))
-                ->aprobada($request->get('aprobadas'))
-                ->whereIn('carrera_id', $idcarreras)
-                ->whereIn('sede_id', $idsedes)
-                ->whereRaw('entregado is true and prox_version is null')
-                ->paginate(10);
-                return view('lectura.planificaciones.aprobado', compact('aprobado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              elseif($estado=='revisado'){
-                  $revisado=Planificacion::whereSede($request->get('sede'))
-                  ->carrera($request->get('carrera'))
-                  ->anio($request->get('anio_academico'))
-                  ->asignatura($request->get('asignatura'))
-                  ->profesor($request->get('profesor'))
-                  ->revisada($request->get('revisadas'))
-                  ->whereIn('carrera_id', $idcarreras)
-                  ->whereIn('sede_id', $idsedes)
-                  ->whereRaw('entregado is true and prox_version is null')
-                  ->paginate(10);
-                  return view('lectura.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              elseif($estado=='entregado'){
-                  $entregado=Planificacion::whereSede($request->get('sede'))
-                  ->carrera($request->get('carrera'))
-                  ->anio($request->get('anio_academico'))
-                  ->asignatura($request->get('asignatura'))
-                  ->profesor($request->get('profesor'))
-                  ->entregada($request->get('entregadas'))
-                  ->whereIn('carrera_id', $idcarreras)
-                  ->whereIn('sede_id', $idsedes)
-                  ->whereRaw('entregado is true and prox_version is null')
-                  ->paginate(10);
-                  return view('lectura.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
-              }
-              else{
-                return view('lectura.planificaciones.index', compact('planificaciones', 'sedes' , 'carreras', 'anio_academico'));
-              }
+            return view('lectura.planificaciones.aprobado', compact('aprobado', 'sedes' , 'carreras', 'anio_academico'));
         }
   }
+
+  public function revisado(Request $request){
+    $estado = Trim($request->get('estado'));
+    $materia = trim($request->get('materia'));
+
+      $request->user()->authorizeRoles(['user', 'admin', 'control', 'lectura']);
+      $anios = Planificacion::pluck('anio_academico')->unique()->sort();
+      $anio_academico = array();
+
+      $sedes = Sede::pluck('nombre', 'id');
+      $carreras = Carrera::pluck('nombre', 'id');
+    
+      $revisado = Planificacion::whereSede($request->get('sede'))
+      ->carrera($request->get('carrera'))
+      ->asignatura($request->get('asignatura'))
+      ->profesor($request->get('profesor'))
+      ->revisada($request->get('revisadas'))
+      ->anio($request->get('anio_academico'))
+      ->paginate(10);
+  
+      foreach ($anios as $anio){
+          $anio_academico[$anio] = $anio;
+      }
+      if ($request->user()->hasRole('admin')) {
+              return view('admin.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
+
+      }elseif (Auth::user()->hasRole('control') && \Session::get('tipoUsuario') == 'control') {
+
+          foreach ($request->user()->docente->revisorDeCarreras as $carrera) {
+              $idcarreras[] = $carrera->id;
+              $carreras[$carrera->id] = $carrera->nombre;
+          }
+          foreach ($request->user()->docente->revisorDeSedes as $sede){
+              $idsedes[] = $sede->id;
+              $sedes[$sede->id] = $sede->nombre;
+          }
+          return view('revisor.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
+           
+      } elseif (Auth::user()->hasRole('user') && \Session::get('tipoUsuario') == 'user') {
+          $revisado = Planificacion::whereRaw('docente_id =' . $request->user()->docente->id . ' and prox_version is null')
+          ->paginate(10);  
+          return view('usuario.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
+      } elseif (Auth::user()->hasRole('lectura') && \Session::get('tipoUsuario') == 'lectura'){
+          $sedes = Sede::pluck('nombre', 'id');
+          $carreras = Carrera::pluck('nombre', 'id');
+          $anios = Planificacion::pluck('anio_academico')->unique()->sort();
+          $anio_academico = array();
+          foreach ($anios as $anio) {
+              $anio_academico[$anio] = $anio;
+          }
+          return view('lectura.planificaciones.revisado', compact('revisado', 'sedes' , 'carreras', 'anio_academico'));
+        }
+}
+
+    public function entregado(Request $request){
+        $estado = Trim($request->get('estado'));
+        $materia = trim($request->get('materia'));
+ 
+      $request->user()->authorizeRoles(['user', 'admin', 'control', 'lectura']);
+      $anios = Planificacion::pluck('anio_academico')->unique()->sort();
+      $anio_academico = array();
+
+      $sedes = Sede::pluck('nombre', 'id');
+      $carreras = Carrera::pluck('nombre', 'id');
+    
+      $entregado = Planificacion::whereSede($request->get('sede'))
+      ->carrera($request->get('carrera'))
+      ->asignatura($request->get('asignatura'))
+      ->profesor($request->get('profesor'))
+      ->entregada($request->get('entregadas'))
+      ->anio($request->get('anio_academico'))
+      ->paginate(10);
+  
+      foreach ($anios as $anio){
+          $anio_academico[$anio] = $anio;
+      }
+      if ($request->user()->hasRole('admin')) {
+              return view('admin.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
+
+      }elseif (Auth::user()->hasRole('control') && \Session::get('tipoUsuario') == 'control') {
+
+          foreach ($request->user()->docente->revisorDeCarreras as $carrera) {
+              $idcarreras[] = $carrera->id;
+              $carreras[$carrera->id] = $carrera->nombre;
+          }
+          foreach ($request->user()->docente->revisorDeSedes as $sede){
+              $idsedes[] = $sede->id;
+              $sedes[$sede->id] = $sede->nombre;
+          }
+          return view('revisor.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
+           
+      } elseif (Auth::user()->hasRole('user') && \Session::get('tipoUsuario') == 'user') {
+          $entregado = Planificacion::whereRaw('docente_id =' . $request->user()->docente->id . ' and prox_version is null')
+          ->paginate(10);  
+          return view('usuario.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
+      } elseif (Auth::user()->hasRole('lectura') && \Session::get('tipoUsuario') == 'lectura'){
+          $sedes = Sede::pluck('nombre', 'id');
+          $carreras = Carrera::pluck('nombre', 'id');
+          $anios = Planificacion::pluck('anio_academico')->unique()->sort();
+          $anio_academico = array();
+          foreach ($anios as $anio) {
+              $anio_academico[$anio] = $anio;
+          }
+          return view('lectura.planificaciones.entregado', compact('entregado', 'sedes' , 'carreras', 'anio_academico'));
+        }
+    }
 
   public function getCarreras($id)
   {

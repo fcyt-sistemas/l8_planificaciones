@@ -25,7 +25,7 @@
                             <div class="icon">
                               <i class="ion ion-bag"></i>
                             </div>
-                            <a href="{{ route('planificaciones') }}" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('admin.planificaciones.revisado') }}" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
                           </div>
                         </div>
                         <!-- ./col -->
@@ -40,7 +40,7 @@
                             <div class="icon">
                               <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="{{ route('planificaciones') }}" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('planificaciones.aprobado') }}" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
                           </div>
                         </div>
                         <!-- ./col -->
@@ -55,7 +55,7 @@
                             <div class="icon">
                               <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="{{ route('planificaciones') }}" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ route('planificaciones.entregado') }}" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
                           </div>
                         </div>
                         <!-- ./col -->

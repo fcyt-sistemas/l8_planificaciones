@@ -10,7 +10,7 @@
                     <div class="button">
                         <a href="{{ route('revisores.create') }}" class="small-box-footer">Agregar Usuario Revisor <i class="fas fa-arrow-circle-right"></i></a>
 	             	</div>
-                    <form action="{{route('revisores')}}" method="GET"> 
+                    <form action="{{route('RevisorController::Class')}}" method="GET"> 
                     @if(Session::has('message'))
                     <div class="alert alert-success alert-dismissible" role="alert">
                         <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>

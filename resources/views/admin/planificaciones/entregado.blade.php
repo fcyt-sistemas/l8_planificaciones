@@ -6,7 +6,7 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-header form-inline">
-          <h4 class="col-md-9">Listado de planificaciones Aprobadas!</h4>
+          <h4 class="col-md-9">Listado de planificaciones Entregadas!</h4>
         </div>
 
         <div class="input-group mb-3">

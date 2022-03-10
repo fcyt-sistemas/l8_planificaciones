@@ -198,7 +198,7 @@ class Planificacion extends Model
         }
     }*/
     
-    public function scopeAprobada($query,$aprobadas){
+    public function scopeAprobada($query,$aprobadas){ 
         if($aprobadas=='on'){
             $query->where('planificaciones.aprobado',true);
         }

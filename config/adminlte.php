@@ -46,7 +46,7 @@ return [
     */
 
     'logo' => '<b>FCYT<b>',
-    'logo_img' => '/img/logo_full.jpg',
+    'logo_img' => '/public/adminlte/img/logo_full.jpg',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -67,9 +67,9 @@ return [
     'usermenu_enabled' => true,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => true,
+    'usermenu_image' => false,
     'usermenu_desc' => false,
-    'usermenu_profile_url' => true,
+    'usermenu_profile_url' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -257,38 +257,38 @@ return [
         [
             'text'       => 'Revisores',
             'icon_color' => 'indigo',
-            'url'        => '/admin/revisores',
+            'url'        => 'admin/revisores/',
         ],
         [
             'text'       => 'Usuarios',
             'icon_color' => 'orange',
-            'url'        => 'usuarios',
+            'url'        => 'admin/usuarios',
         ],
         [
             'text'       => 'Docentes',
             'icon_color' => 'teal',
-            'url'        => 'docentes',
+            'url'        => 'admin/docentes',
         ],
         ['header' => 'Administración Académica'],
         [
             'text'       => 'Sedes',
             'icon_color' => 'red',
-            'url'        => 'sedes',
+            'url'        => 'admin/sedes',
         ],
         [
             'text'       => 'Planes',
             'icon_color' => 'yellow',
-            'url'        => 'planes',
+            'url'        => 'admin/planes',
         ],
         [
             'text'       => 'Cátedras',
             'icon_color' => 'cyan',
-            'url'        => 'catedras',
+            'url'        => 'admin/catedras',
         ],
         [
             'text'       => 'Carreras',
             'icon_color' => 'pink',
-            'url'        => 'carreras',
+            'url'        => 'admin/carreras',
         ],
     ],
 
@@ -312,7 +312,6 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
-        //JeroenNoten\LaravelAdminLte\Menu\Filters\SubmenuFilter::class,
     ],
 
     /*
