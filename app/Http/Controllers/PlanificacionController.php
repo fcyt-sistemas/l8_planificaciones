@@ -53,9 +53,9 @@ class PlanificacionController extends Controller
         foreach ($anios as $anio){
             $anio_academico[$anio] = $anio;
         }
-
+  
         if ($request->user()->hasRole('admin')) {
-            return view('admin.planificaciones.index', ['planificaciones' => $planificaciones, 'sedes' => $sedes, 'carreras' => $carreras, 'anio_academico' => $anio_academico]);
+            return view('admin.planificaciones.index', compact('planificaciones', 'sedes', 'carreras', 'anio_academico'));
         }elseif (Auth::user()->hasRole('control') && \Session::get('tipoUsuario') == 'control') {
 
             foreach ($request->user()->docente->revisorDeCarreras as $carrera) {
@@ -79,7 +79,7 @@ class PlanificacionController extends Controller
             ->whereIn('sede_id', $idsedes)
             ->whereRaw('entregado is true and prox_version is null')
             ->paginate(10);
-
+            
             return view('revisor.planificaciones.index', ['planificaciones' => $planificaciones, 'sedes' => $sedes, 'carreras' => $carreras, 'anio_academico' => $anio_academico]);
         } elseif (Auth::user()->hasRole('user') && \Session::get('tipoUsuario') == 'user') {
             $planificaciones = Planificacion::whereRaw('docente_id =' . $request->user()->docente->id . ' and prox_version is null')
@@ -119,6 +119,7 @@ class PlanificacionController extends Controller
         $planes = Plan::pluck('nombre', 'id');
         $carreras = Carrera::pluck('nombre', 'id');
         $sedes = Sede::pluck('nombre', 'id');
+        Session::flash('message', 'Recuerde que la sesión expira dentro de dos horas, si no guarda los cambios antes, perderá todo el contenido!');
         return view('usuario.planificaciones.create', ['catedras' => $catedras, 'planes' => $planes, 'carreras' => $carreras, 'sedes' => $sedes]);
     }
 

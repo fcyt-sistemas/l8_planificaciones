@@ -46,7 +46,7 @@ return [
     */
 
     'logo' => '<b>FCYT<b>',
-    'logo_img' => '/public/adminlte/img/logo_full.jpg',
+    'logo_img' => 'image',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -257,17 +257,17 @@ return [
         [
             'text'       => 'Revisores',
             'icon_color' => 'indigo',
-            'url'        => 'admin/revisores/',
+            'url'        => 'revisores',
         ],
         [
             'text'       => 'Usuarios',
             'icon_color' => 'orange',
-            'url'        => 'admin/usuarios',
+            'url'        => 'usuarios',
         ],
         [
             'text'       => 'Docentes',
             'icon_color' => 'teal',
-            'url'        => 'admin/docentes',
+            'url'        => 'docentes',
         ],
         ['header' => 'Administración Académica'],
         [

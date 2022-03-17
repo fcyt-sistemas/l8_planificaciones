@@ -7,6 +7,9 @@
         <div class="col-md-15">
             <div class="card">
                 <div class="card-header">¡Usuarios Revisores!
+                    <div class="card-header justify-content-between">
+                        <form name="add-blog-post-form" id="add-blog-post-form" method="GET" action="{{url('revisores')}}">
+                      </div>
                     <div class="button">
                         <a href="{{ route('revisores.create') }}" class="small-box-footer">Agregar Usuario Revisor <i class="fas fa-arrow-circle-right"></i></a>
 	             	</div>

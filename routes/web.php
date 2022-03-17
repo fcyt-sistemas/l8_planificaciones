@@ -1,17 +1,5 @@
 <?php
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PlanificacionController;
-use App\Http\Controllers\EmailsController;
-use App\Http\Controllers\RevisorController;
-use App\Http\Controllers\MemoriaController;
-use App\Http\Controllers\SedeController;
-use App\Http\Controllers\CarreraController;
-use App\Http\Controllers\CatedraController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PlanController;
-use App\Http\Controllers\DocenteController;
-use App\Http\Controllers\Auth\ResetPasswordController;
+
 
 
 /*
@@ -30,32 +18,26 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home/revisor', [ResetPasswordController::class,'resetPassword'])->name('reset');
-Route::post('/home/revisor', [ResetPasswordController::class,'resetPassword'])->name('reset');
-Route::get('/home/usuario', [ResetPasswordController::class,'resetPassword'])->name('reset');
-Route::post('/home/usuario', [ResetPasswordController::class,'resetPassword'])->name('reset');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/password/reset', [ResetPasswordController::class,'resetPassword'])->name('reset');
 Route::get('/home', [HomeController::class,'index'])->name('home');
 Route::get('/perfil/{perfil}',[HomeController::Class,'cambiarPerfil'])->name('perfil');
-
-Route::post('/admin/planificaciones', [PlanificacionController::Class,'index'])->name('planificaciones');
-Route::get('/admin/home', [PlanificacionController::Class, 'aprobado'])->name('aprobado');
-Route::get('/admin/home', [PlanificacionController::Class, 'revisado'])->name('revisado');
-Route::get('/admin/home', [PlanificacionController::Class, 'entregado'])->name('entregado');
-Route::get('/admin/home', [PlanificacionController::Class,'index'])->name('index');
+Route::get('/home', [LogoControllers::Class, 'index'])->name('image');
+Route::get('/admin/planificaciones', [PlanificacionController::Class,'index'])->name('planificaciones');
+Route::get('/admin/planificaciones/aprobado', [PlanificacionController::Class, 'aprobado'])->name('aprobado');
+Route::get('/admin/planificaciones/revisado', [PlanificacionController::Class, 'revisado'])->name('revisado');
+Route::get('/admin/planificaciones/entregado', [PlanificacionController::Class, 'entregado'])->name('entregado');
 Route::get('/planificaciones/{id}/ver', [PlanificacionController::Class,'ver']);
 Route::post('/planificaciones/{id}/ver', [PlanificacionController::Class,'ver']);
-
-//botones index planificaciones
-Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.entregado');
+//Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.entregado');
 Route::get('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.entregado');
-Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.observado');
+//Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.observado');
 Route::get('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.observado');
-Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.aprobado');
+//Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.aprobado');
 Route::get('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.aprobado');
-Route::post('/admin/planificaciones/revisado', [PlanificacionController::Class, 'show'])->name('boton.ver');
+//Route::post('/admin/planificaciones/revisado', [PlanificacionController::Class, 'show'])->name('boton.ver');
 Route::get('/admin/planificaciones/revisado', [PlanificacionController::Class, 'show'])->name('boton.ver');
-Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.revisar');
+//Route::post('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.revisar');
 Route::get('/admin/planificaciones', [PlanificacionController::Class, 'show'])->name('boton.revisar');
 
 Route::get('/planificaciones/{id}/guardar', [PlanificacionController::Class,'guardar']);
@@ -71,6 +53,9 @@ Route::get('/memorias/reporte', [MemoriaController::Class,'reporte'])->name('mem
 
 Route::resource('passwords/reset', ResetPasswordController::Class);
 Route::resource('planificaciones', PlanificacionController::class);
+Route::resource('aprobado', PlanificacionController::class);
+Route::resource('revisado', PlanificacionController::class);
+Route::resource('entregado', PlanificacionController::class);
 Route::resource('memorias', MemoriaController::Class);
 Route::resource('revisores', RevisorController::Class);
 Route::resource('docentes', DocenteController::Class);
@@ -79,15 +64,17 @@ Route::resource('catedras', CatedraController::Class);
 Route::resource('planes', PlanController::Class);
 Route::resource('carreras', CarreraController::Class);
 Route::resource('sedes', SedeController::Class);
+Route::resource('revisores', RevisorController::Class);
+Route::resource('home', HomeController::class);
 
 Route::get('/Mail', [EmailsControllers::Class,'getMail']);
 
-Route::get('revisores',[RevisorController::Class,'index'])->name('revisores');
-Route::post('revisores',[RevisorController::Class,'edit'])->name('edit');
+Route::get('/admin/revisores',[RevisorController::Class,'index'])->name('revisores');
+Route::get('/admin/revisores',[RevisorController::Class,'edit'])->name('edit');
 //Route::post('revisores',[RevisorController::class,'store']->name('revisores.store'));
-Route::get('docentes',[DocenteController::Class,'index'])->name('docentes');
+Route::get('/admin/docentes',[DocenteController::Class,'index'])->name('docentes');
 //Route::post('docentes',[DocenteController::class,'store']->name('docentes.store'));
-Route::get('usuarios',[UserController::Class,'index'])->name('usuarios');
+Route::get('/admin/usuarios',[UserController::Class,'index'])->name('usuarios');
 //Route::post('usuarios',[UserController::class,'store']->name('usuarios.store'));
 Route::get('catedras',[CatedraController::Class,'index'])->name('catedras');
 //Route::post('catedras',[CatedraController::class,'store']->name('catedras.store'));
@@ -109,7 +96,7 @@ Route::get('/sedes/{id}/activar', [SedeController::Class,'activar']);
 Route::get('/sedes/{id}/desactivar', [SedeController::Class,'desactivar']);
 
 Route::get('/memorias', [MemoriaController::Class,'index'])->name('memorias');
-Route::post('/memorias', [MemoriaController::Class,'index'])->name('memorias');
+//Route::post('/memorias', [MemoriaController::Class,'index'])->name('memorias');
 Route::get('/memorias/{id}/entregar', [MemoriaController::Class,'entregar']);
 Route::get('/memorias/{id}/revisar', [MemoriaController::Class,'revisar']);
 Route::get('/memorias/{id}/duplicar', [MemoriaController::Class,'duplicar']);
@@ -126,4 +113,3 @@ Route::get('/carreras/{id}', [PlanificacionController::Class,'getCarreras']);
 Route::get('/planes/{id}', [PlanificacionController::Class,'getPlanes']);
 Route::get('/catedras/{id}', [PlanificacionController::Class,'getCatedras']);
 Route::get('/catedras/{id}', [CatedraController::Class,'getCatedras']);
-

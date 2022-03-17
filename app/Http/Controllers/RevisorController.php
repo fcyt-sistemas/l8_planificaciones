@@ -37,7 +37,7 @@ class RevisorController extends Controller
         ->orderBy('sede_id','Asc')->paginate(5);
         
         if($request->user()->hasRole('admin')){
-            return view('admin.revisores.index',['revisores' => $revisores]);
+            return view('admin.revisores.index', compact('revisores'));
         }
         else{
             return view('revisor.planificaciones.index', ['revisores' => $revisores]);

@@ -11,8 +11,8 @@
         </div>
     
         <div class="card-header justify-content-between">
-          <form name="add-blog-post-form" id="add-blog-post-form" method="GET" action="{{url('admin.planificaciones.index')}}">
-          </div>
+          <form name="add-blog-post-form" id="add-blog-post-form" method="GET" action="{{url('planificaciones')}}">
+        </div>
         @if(Session::has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">
           <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>

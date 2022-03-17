@@ -11,7 +11,7 @@
         </div>
     
         <div class="card-header justify-content-between">
-          <form name="add-blog-post-form" id="add-blog-post-form" method="GET" action="{{url('revisado')}}">
+          <form name="add-blog-post-form" id="add-blog-post-form" action="{{url('/revisado')}}">
           </div>
         @if(Session::has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">

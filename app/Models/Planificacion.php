@@ -190,13 +190,13 @@ class Planificacion extends Model
             $query->where('planificaciones.id',$id);
         }
     }
-    /*
-    public function scopePlani($query,$plani){
-        if($plani!=''){
+    
+    public function scopePlani($query,$planificaciones){
+        if($planificaciones!=''){
             $query->where('sede_id','carrera_id','catedra_id','anio_academico', 'plan_id')
                   ->select('planificaciones.*');
         }
-    }*/
+    }
     
     public function scopeAprobada($query,$aprobadas){ 
         if($aprobadas=='on'){

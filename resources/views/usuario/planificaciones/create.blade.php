@@ -18,7 +18,12 @@
 					<!--@include('errors')-->
 					{!! Form::open(['action' => 'PlanificacionController@store','method' => 'POST'])!!}
 					{!! Form::hidden('docente_id', Auth::user()->docente->id) !!}
-					
+					@if(Session::has('message'))
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
+							{{Session::get('message')}}
+						</div>
+					@endif
 					<div class="input-group mb-3">
 					  <div class="input-group-prepend">
 					    <label class="input-group-text" for="sede_id">Sede:</label>

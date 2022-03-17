@@ -98,7 +98,7 @@ class MemoriaController extends Controller
         $planes = Plan::pluck('nombre', 'id');
         $carreras = Carrera::pluck('nombre', 'id');
         $sedes = Sede::pluck('nombre', 'id');
-
+        Session::flash('message', 'Recuerde que la sesión expira dentro de dos horas, si no guarda los cambios antes, perderá todo el contenido!');
         return view('usuario.memorias.create', ['catedras' => $catedras, 'planes' => $planes, 'carreras' => $carreras, 'sedes' => $sedes]);
     }
 
